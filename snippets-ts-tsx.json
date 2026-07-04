@@ -1,0 +1,37 @@
+{
+  "React Functional Component": {
+    "prefix": "rfc",
+    "body": [
+      "export default function ${1:Component}() {",
+      "  return <div>$0</div>;",
+      "}"
+    ],
+    "description": "Creates a default function component with synchronized multi-cursor renaming"
+  },
+
+  "Async Functional Component": {
+    "prefix": "afc",
+    "body": [
+      "export async function ${1:Component}() {",
+      "  return null;$0",
+      "}"
+    ],
+    "description": "Creates an async function component with synchronized multi-cursor renaming"
+  },
+
+  "Console Log": {
+    "prefix": "clg",
+    "body": [
+      "console.log($0);"
+    ],
+    "description": "Inserts a basic console.log statement"
+  },
+
+  "Console Error": {
+    "prefix": "cle",
+    "body": [
+      "console.error($0);"
+    ],
+    "description": "Inserts a basic console.error statement"
+  }
+}
