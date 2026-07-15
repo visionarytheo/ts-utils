@@ -1,11 +1,19 @@
-// lib/pg.ts
-import postgres from 'postgres';
+import postgres from "postgres";
 
-// Initialize the single pooler wrapper globally
-const sql = postgres(process.env.DATABASE_URL!, { 
-  ssl: 'require',
-  max: 10, // Restrict connection bounds safely for serverless runtimes
-  idle_timeout: 30 // Kill idle connections after 30 seconds
+const { DATABASE_URL } = process.env;
+
+if (!DATABASE_URL) {
+  throw new Error(
+    "❌ DATABASE_URL is not defined in your environment variables",
+  );
+}
+
+const isLocal =
+  DATABASE_URL.includes("localhost") || DATABASE_URL.includes("127.0.0.1");
+
+export const sql = postgres(DATABASE_URL, {
+  ssl: isLocal ? false : "require",
+  max: 10,
+  idle_timeout: 30,
 });
 
-export default sql;
