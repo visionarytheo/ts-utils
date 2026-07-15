@@ -1,15 +1,37 @@
-export function getErrorMessage(error: unknown): string {
-  let message: string;
+import { ZodError } from "zod";
 
-  if (error instanceof Error) {
-    message = error.message;
-  } else if (error && typeof error === "object" && "message" in error) {
-    message = String(error.message);
-  } else if (typeof error === "string") {
-    message = error;
-  } else {
-    message = "Something went wrong";
+export function getZodErrorMessage(error: ZodError): string {
+  return (
+    error.issues
+      .map((issue) => `${issue.path.join(".")}: ${issue.message}`)
+      .join(", ") || "Invalid input data"
+  );
+}
+
+export function getErrorMessage(error: unknown): string {
+  if (error instanceof ZodError) {
+    return getZodErrorMessage(error);
   }
 
-  return message;
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  if (error && typeof error === "object" && "message" in error) {
+    return String((error as { message: unknown }).message);
+  }
+
+  if (typeof error === "string") {
+    return error;
+  }
+
+  return "Something went wrong";
 }
+
+export function getErrorCode(error: unknown): string | undefined {
+  if (error && typeof error === "object" && "code" in error) {
+    return String((error as { code: unknown }).code);
+  }
+  return undefined;
+}
+
